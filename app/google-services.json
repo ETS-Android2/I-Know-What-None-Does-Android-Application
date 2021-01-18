@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "902300985165",
+    "firebase_url": "https://i-know-what-none-does.firebaseio.com",
+    "project_id": "i-know-what-none-does",
+    "storage_bucket": "i-know-what-none-does.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:902300985165:android:f6ca5c26cac939d7997904",
+        "android_client_info": {
+          "package_name": "com.project.iknowwhatnonedoes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "902300985165-d4ke2122ui3ubb473o8kg6hfonm6momg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.project.iknowwhatnonedoes",
+            "certificate_hash": "df33f7ff739cf4c83faa5a3345a808a0ae0dfd75"
+          }
+        },
+        {
+          "client_id": "902300985165-bltftvu96qob2q21tqcqm66fi8itjinu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfbohI166dskI8AB2gh4EV6vpZ_olROr8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "902300985165-bltftvu96qob2q21tqcqm66fi8itjinu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
