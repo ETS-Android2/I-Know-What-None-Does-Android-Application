@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -16,12 +17,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class Post extends AppCompatActivity implements DatabaseReference.CompletionListener {
+public class Post extends AppCompatActivity {
 
     EditText exp, name, country, email;
     Button postbtn;
@@ -29,6 +32,8 @@ public class Post extends AppCompatActivity implements DatabaseReference.Complet
     FirebaseDatabase firebaseDatabase;
     DatabaseReference dbRef;
     ConnectivityManager connectivityManager;
+    SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,8 +46,19 @@ public class Post extends AppCompatActivity implements DatabaseReference.Complet
         firebaseDatabase = FirebaseDatabase.getInstance();
         dbRef = firebaseDatabase.getReference("Experiences").push();
         connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
+        sharedPreferences = getSharedPreferences("IKWND", MODE_PRIVATE);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(sharedPreferences.contains("NAME")&&sharedPreferences.contains("EMAIL")&&sharedPreferences.contains("COUNTRY"))
+        {
+            name.setText(sharedPreferences.getString("NAME", ""));
+            country.setText(sharedPreferences.getString("COUNTRY", ""));
+            email.setText(sharedPreferences.getString("EMAIL", ""));
+        }
+    }
 
     public void post(View view) {
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
@@ -54,13 +70,26 @@ public class Post extends AppCompatActivity implements DatabaseReference.Complet
             Experience = exp.getText().toString();
             if(!Name.equals("")&&!Country.equals("")&&!Email.equals("")&&!Experience.equals(""))
             {
-                String ID = dbRef.push().toString();
-                dbRef.child("Name").setValue(Name, this);
-                dbRef.child("Experience").setValue(Experience, this);
-                dbRef.child("Country").setValue(Country, this);
-                dbRef.child("Email").setValue(Email, this);
-                Intent intent = new Intent(Post.this, MainActivity.class);
-                startActivity(intent);
+                Upload data = new Upload();
+                data.setName(Name);
+                data.setCountry(Country);
+                data.setEmail(Email);
+                data.setExperience(Experience);
+                try {
+                    dbRef.setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isComplete() && task.isSuccessful())
+                                Toast.makeText(Post.this, "Upload Successful", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    Intent intent = new Intent(Post.this, MainActivity.class);
+                    startActivity(intent);
+                }
+                catch (Exception e)
+                {
+                    Toast.makeText(Post.this, "Upload Failed", Toast.LENGTH_SHORT).show();
+                }
             }
             else
             {
@@ -81,7 +110,9 @@ public class Post extends AppCompatActivity implements DatabaseReference.Complet
     }
 
     @Override
-    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-        Toast.makeText(Post.this, "Upload Successful", Toast.LENGTH_SHORT).show();
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(Post.this, MainActivity.class);
+        startActivity(intent);
     }
 }
