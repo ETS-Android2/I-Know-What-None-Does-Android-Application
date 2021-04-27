@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
 
     ListView listView;
     Toolbar toolbar;
-    ArrayAdapter adapter;
+    ArrayAdapter<String> adapter;
     ArrayList<String> arrayList;
     FirebaseAnalytics firebaseAnalytics;
     FirebaseDatabase firebaseDatabase;
@@ -54,12 +54,12 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
         setSupportActionBar(toolbar);
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("Experiences");
+        databaseReference = firebaseDatabase.getReference().child("Experiences");
         sharedPreferences = getSharedPreferences("IKWND", MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.apply();
         arrayList = new ArrayList<String>();
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayList);
+        adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, arrayList);
         name = "";
         country = "";
         exp = "";
@@ -118,11 +118,32 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
         arrayList.clear();
         for(DataSnapshot dataSnapshot : snapshot.getChildren())
         {
-            loadData(dataSnapshot);
-//            Upload data = dataSnapshot.getValue(Upload.class);
-//            arrayList.add(data);
+            String data = "";
+            String name = "", place = "", exp = "";
+            for(DataSnapshot Snapshot : dataSnapshot.getChildren())
+            {
+
+                switch (Snapshot.getKey()) {
+                    case "Name": {
+                        name = Snapshot.getValue().toString().trim();
+                        break;
+                    }
+                    case "Country": {
+                        place = Snapshot.getValue().toString().trim();
+                        break;
+                    }
+                    case "Experience": {
+                        exp = Snapshot.getValue().toString().trim();
+                        break;
+                    }
+                }
+            }
+            data = name+"\t\t"+place+"\n\n"+exp;
+            arrayList.add(data.trim());
+//             Upload data = dataSnapshot.getValue(Upload.class);
+//             arrayList.add(data);
         }
-        // load();
+//        load();
         adapter.notifyDataSetChanged();
         listView.setAdapter(adapter);
     }
@@ -157,8 +178,8 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
                     break;
                 }
             }
-            data = name +"\t" + country + "\n \n" + exp;
-            arrayList.add(data);
+            data = name +"\t\t" + country + "\n \n" + exp;
+//            arrayList.add(data);
         }
     }
 //    void load()
@@ -176,6 +197,9 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
 //                name.setText(data.getName());
 //                place.setText(data.getCountry());
 //                exp.setText(data.getExperience());
+//                name.setText("Ayush");
+//                place.setText("India");
+//                exp.setText("Hello");
 //                return convertView;
 //            }
 //        };

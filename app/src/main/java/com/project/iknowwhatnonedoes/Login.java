@@ -1,5 +1,6 @@
 package com.project.iknowwhatnonedoes;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +12,15 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.StringTokenizer;
 
 public class Login extends AppCompatActivity {
 
@@ -67,7 +77,35 @@ public class Login extends AppCompatActivity {
         editor.putString("EMAIL", Email);
         editor.apply();
 
+        try
+        {
+            Upload(Name, Country, Email);
+        }
+        catch(Exception e)
+        {
+            Toast.makeText(this, "Internal Error. Contact the Developer.", Toast.LENGTH_SHORT).show();
+        }
+
+
         Intent intent = new Intent(Login.this, MainActivity.class);
         startActivity(intent);
+    }
+
+    void Upload(String dname, String dcountry, String demail)
+    {
+        String key = dname+dcountry+demail;
+        StringTokenizer stringTokenizer = new StringTokenizer(key, " .#$[]@");
+        key = "";
+        while(stringTokenizer.hasMoreTokens())
+        {
+            key = key.concat(stringTokenizer.nextToken());
+        }
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference().child("Users").child(key.trim());
+        Upload upload = new Upload();
+        upload.setName(dname.trim());
+        upload.setCountry(dcountry.trim());
+        upload.setEmail(demail.trim());
+        databaseReference.setValue(upload);
     }
 }
