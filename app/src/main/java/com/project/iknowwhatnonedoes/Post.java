@@ -2,6 +2,7 @@ package com.project.iknowwhatnonedoes;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -24,11 +26,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.time.LocalDate;
+
 public class Post extends AppCompatActivity {
 
     EditText exp, name, country, email;
     Button postbtn;
-    String Name, Country, Email, Experience;
+    String Name, Country, Email, Experience, Date;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference dbRef;
     ConnectivityManager connectivityManager;
@@ -43,6 +47,7 @@ public class Post extends AppCompatActivity {
         country = findViewById(R.id.postCountry);
         email = findViewById(R.id.postEmail);
         postbtn = findViewById(R.id.postButton);
+        exp.requestFocus();
         firebaseDatabase = FirebaseDatabase.getInstance();
         dbRef = firebaseDatabase.getReference("Experiences").push();
         connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
@@ -68,6 +73,7 @@ public class Post extends AppCompatActivity {
             Country = country.getText().toString();
             Email = email.getText().toString();
             Experience = exp.getText().toString();
+            Date = String.valueOf(LocalDate.now());
             if(!Name.equals("")&&!Country.equals("")&&!Email.equals("")&&!Experience.equals(""))
             {
                 Upload data = new Upload();
@@ -75,6 +81,7 @@ public class Post extends AppCompatActivity {
                 data.setCountry(Country);
                 data.setEmail(Email);
                 data.setExperience(Experience);
+                data.setDate(Date);
                 try {
                     dbRef.setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -88,13 +95,14 @@ public class Post extends AppCompatActivity {
                 }
                 catch (Exception e)
                 {
+                    System.out.println(e);
                     Toast.makeText(Post.this, "Upload Failed", Toast.LENGTH_SHORT).show();
                 }
             }
             else
             {
                 AlertDialog.Builder builder = new AlertDialog.Builder(Post.this);
-                builder.setMessage("Please fill all the feilds")
+                builder.setMessage("Please fill all the fields")
                         .setPositiveButton("Ok", null);
                 builder.create().show();
             }

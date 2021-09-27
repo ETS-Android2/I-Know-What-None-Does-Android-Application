@@ -3,6 +3,7 @@ package com.project.iknowwhatnonedoes;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -11,9 +12,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,12 +39,12 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
 
     ListView listView;
     Toolbar toolbar;
-    ArrayAdapter<String> adapter;
-    ArrayList<String> arrayList;
+    ArrayAdapter<Upload> adapter;
+    ArrayList<Upload> arrayList;
     FirebaseAnalytics firebaseAnalytics;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
-    String name, country, exp;
+    String name, country, exp, date;
     ConnectivityManager connectivityManager;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -51,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
         setContentView(R.layout.activity_main);
         listView = findViewById(R.id.list);
         toolbar = findViewById(R.id.toolbar);
+        toolbar.getOverflowIcon().setColorFilter(getResources().getColor(R.color.accent_color), PorterDuff.Mode.SRC_ATOP);
         setSupportActionBar(toolbar);
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -58,11 +63,12 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
         sharedPreferences = getSharedPreferences("IKWND", MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.apply();
-        arrayList = new ArrayList<String>();
-        adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, arrayList);
+        arrayList = new ArrayList<Upload>();
         name = "";
         country = "";
         exp = "";
+        date = "";
+        listView.setAdapter(adapter);
         connectivityManager = (ConnectivityManager)getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         if(activeNetwork!=null)
@@ -97,6 +103,11 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
                 signout();
                 break;
             }
+            case R.id.settings:
+            {
+                settings();
+                break;
+            }
         }
         return true;
     }
@@ -105,107 +116,16 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
     protected void onStart() {
         super.onStart();
         databaseReference.addValueEventListener(this);
-        arrayList.clear();
     }
 
     public void open() {
         Intent intent = new Intent(MainActivity.this, Post.class);
         startActivity(intent);
     }
-
-    @Override
-    public void onDataChange(@NonNull DataSnapshot snapshot) {
-        arrayList.clear();
-        for(DataSnapshot dataSnapshot : snapshot.getChildren())
-        {
-            String data = "";
-            String name = "", place = "", exp = "";
-            for(DataSnapshot Snapshot : dataSnapshot.getChildren())
-            {
-
-                switch (Snapshot.getKey()) {
-                    case "Name": {
-                        name = Snapshot.getValue().toString().trim();
-                        break;
-                    }
-                    case "Country": {
-                        place = Snapshot.getValue().toString().trim();
-                        break;
-                    }
-                    case "Experience": {
-                        exp = Snapshot.getValue().toString().trim();
-                        break;
-                    }
-                }
-            }
-            data = name+"\t\t"+place+"\n\n"+exp;
-            arrayList.add(data.trim());
-//             Upload data = dataSnapshot.getValue(Upload.class);
-//             arrayList.add(data);
-        }
-//        load();
-        adapter.notifyDataSetChanged();
-        listView.setAdapter(adapter);
+    public void settings(){
+        Intent intent = new Intent(MainActivity.this, Settings.class);
+        startActivity(intent);
     }
-
-    @Override
-    public void onCancelled(@NonNull DatabaseError error) {
-
-    }
-
-    void loadData(DataSnapshot snapshot)
-    {
-        String data = "";
-        for(DataSnapshot dataSnapshot : snapshot.getChildren())
-        {
-            String key = dataSnapshot.getKey();
-            assert key != null;
-            switch (key)
-            {
-                case "Name":
-                {
-                    name = dataSnapshot.getValue().toString();
-                    break;
-                }
-                case "Experience":
-                {
-                    exp = dataSnapshot.getValue().toString();
-                    break;
-                }
-                case "Country":
-                {
-                    country = dataSnapshot.getValue().toString();
-                    break;
-                }
-            }
-            data = name +"\t\t" + country + "\n \n" + exp;
-//            arrayList.add(data);
-        }
-    }
-//    void load()
-//    {
-//        adapter = new ArrayAdapter<Upload>(MainActivity.this, R.layout.view, arrayList){
-//            @SuppressLint("ViewHolder")
-//            @NonNull
-//            @Override
-//            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-//                Upload data = arrayList.get(position);
-//                convertView = getLayoutInflater().inflate(R.layout.view, null);
-//                TextView name = convertView.findViewById(R.id.name);
-//                TextView place = convertView.findViewById(R.id.country);
-//                TextView exp = convertView.findViewById(R.id.exp);
-//                name.setText(data.getName());
-//                place.setText(data.getCountry());
-//                exp.setText(data.getExperience());
-//                name.setText("Ayush");
-//                place.setText("India");
-//                exp.setText("Hello");
-//                return convertView;
-//            }
-//        };
-//        adapter.notifyDataSetChanged();
-//        listView.setAdapter(adapter);
-//    }
 
     public void signout() {
         editor.remove("NAME");
@@ -215,5 +135,55 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
 
         Intent intent = new Intent(MainActivity.this, Login.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onDataChange(@NonNull DataSnapshot snapshot) {
+        arrayList.clear();
+        for(DataSnapshot dataSnapshot : snapshot.getChildren())
+        {
+            Upload data = new Upload();
+            data.setUID(dataSnapshot.getKey());
+            for (DataSnapshot snapshot1 : dataSnapshot.getChildren())
+            {
+                switch (snapshot1.getKey()){
+                    case "name": data.setName(snapshot1.getValue().toString()); break;
+                    case "experience": data.setExperience(snapshot1.getValue().toString()); break;
+                    case "country": data.setCountry(snapshot1.getValue().toString()); break;
+                    case "email": data.setEmail(snapshot1.getValue().toString()); break;
+                    case "date": data.setDate(snapshot1.getValue().toString()); break;
+                }
+            }
+            arrayList.add(data);
+        }
+        try {
+            adapter = new ArrayAdapter<Upload>(MainActivity.this, R.layout.view, arrayList){
+                public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                    if (convertView == null){
+                        convertView = getLayoutInflater().inflate(R.layout.view, null);
+                    }
+                    TextView name = convertView.findViewById(R.id.name);
+                    TextView country = convertView.findViewById(R.id.country);
+                    TextView experience = convertView.findViewById(R.id.exp);
+                    TextView date = convertView.findViewById(R.id.date);
+                    name.setText(arrayList.get(position).getName());
+                    country.setText(arrayList.get(position).getCountry());
+                    experience.setText(arrayList.get(position).getExperience());
+                    date.setText(arrayList.get(position).getDate());
+                    return convertView;
+                }
+            };
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(MainActivity.this, "Contact the Developer", Toast.LENGTH_SHORT).show();
+        }
+        adapter.notifyDataSetChanged();
+        listView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onCancelled(@NonNull DatabaseError error) {
+        Toast.makeText(MainActivity.this, "Database Error", Toast.LENGTH_SHORT).show();
     }
 }

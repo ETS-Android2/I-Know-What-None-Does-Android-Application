@@ -4,8 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
+    android:background="@color/secondary_color"
     tools:context=".Login">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textColor="@color/accent_color"
+        android:fontFamily="@font/rampartrneregular"
+        android:padding="25dp"
+        android:textSize="25dp"
+        android:gravity="center"/>
 
     <LinearLayout
         android:layout_centerInParent="true"
@@ -18,35 +28,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter your Name"
-            android:textColorHint="@color/white"
-            android:textColor="@color/white"/>
+            android:textColorHint="@color/primary_color"
+            android:textColor="@color/primary_color"/>
         <EditText
             android:id="@+id/countrytxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter your Country"
-            android:textColorHint="@color/white"
-            android:textColor="@color/white"/>
+            android:textColorHint="@color/primary_color"
+            android:textColor="@color/primary_color"/>
         <EditText
             android:id="@+id/emailtxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter your Email"
-            android:textColorHint="@color/white"
-            android:textColor="@color/white"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Your Email Won't be Public"
-            android:textColor="@color/white"/>
+            android:textColorHint="@color/primary_color"
+            android:textColor="@color/primary_color"/>
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Your Email Won't be Public"-->
+<!--            android:textColor="@color/primary_color"/>-->
         <Button
             android:id="@+id/enterbtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Enter"
             android:layout_marginTop="5dp"
-            android:background="@color/pink"
-            android:textColor="@color/white"
+            android:background="@drawable/button_style"
+            android:textColor="@color/accent_color"
             android:onClick="enter"/>
     </LinearLayout>
 

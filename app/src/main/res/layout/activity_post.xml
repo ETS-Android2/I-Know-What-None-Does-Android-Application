@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Post"
-    android:background="@drawable/background">
+    android:background="@color/secondary_color">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -21,41 +21,41 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter your Name"
-                android:textColorHint="@color/white"
-                android:textColor="@color/white"/>
+                android:textColorHint="@color/primary_color"
+                android:textColor="@color/primary_color"/>
             <EditText
                 android:id="@+id/postCountry"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter your Country"
-                android:textColorHint="@color/white"
-                android:textColor="@color/white"/>
+                android:textColorHint="@color/primary_color"
+                android:textColor="@color/primary_color"/>
             <EditText
                 android:id="@+id/postEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter your Email"
-                android:textColorHint="@color/white"
-                android:textColor="@color/white"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Your Email Won't be Public"
-                android:textColor="@color/white"/>
+                android:textColorHint="@color/primary_color"
+                android:textColor="@color/primary_color"/>
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Your Email Won't be Public"-->
+<!--                android:textColor="@color/primary_color"/>-->
             <EditText
                 android:id="@+id/postText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter your Experience"
-                android:textColorHint="@color/white"
-                android:textColor="@color/white"/>
+                android:textColorHint="@color/primary_color"
+                android:textColor="@color/primary_color"/>
             <Button
                 android:id="@+id/postButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Post"
-                android:background="@color/pink"
-                android:textColor="@color/white"
+                android:background="@drawable/button_style"
+                android:textColor="@color/accent_color"
                 android:onClick="post"/>
         </LinearLayout>
     </ScrollView>

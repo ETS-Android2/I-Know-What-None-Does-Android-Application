@@ -71,24 +71,27 @@ public class Login extends AppCompatActivity {
         Name = name.getText().toString();
         Country = country.getText().toString();
         Email = email.getText().toString();
-
-        editor.putString("NAME", Name);
-        editor.putString("COUNTRY", Country);
-        editor.putString("EMAIL", Email);
-        editor.apply();
-
-        try
+        if (Name.equalsIgnoreCase("") || Country.equalsIgnoreCase("") || Email.equalsIgnoreCase(""))
+            Toast.makeText(Login.this, "Fill all the fields", Toast.LENGTH_SHORT).show();
+        else
         {
-            Upload(Name, Country, Email);
-        }
-        catch(Exception e)
-        {
-            Toast.makeText(this, "Internal Error. Contact the Developer.", Toast.LENGTH_SHORT).show();
-        }
+            editor.putString("NAME", Name);
+            editor.putString("COUNTRY", Country);
+            editor.putString("EMAIL", Email);
+            editor.apply();
 
+            try
+            {
+                Upload(Name, Country, Email);
+            }
+            catch(Exception e)
+            {
+                Toast.makeText(this, "Internal Error. Contact the Developer.", Toast.LENGTH_SHORT).show();
+            }
 
-        Intent intent = new Intent(Login.this, MainActivity.class);
-        startActivity(intent);
+            Intent intent = new Intent(Login.this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     void Upload(String dname, String dcountry, String demail)

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">I Know What None Does</string>
+    <array name="settings_options" translatable="false">
+        <item>About</item>
+        <item>How To Use</item>
+    </array>
 </resources>

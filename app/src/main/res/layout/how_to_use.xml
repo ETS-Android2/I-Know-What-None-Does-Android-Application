@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/secondary_color">
+
+    <TextView
+        android:id="@+id/heading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/accent_color"
+        android:layout_marginTop="15sp"
+        android:textSize="24sp"
+        android:text="How To Use The App"
+        android:gravity="center"/>
+
+    <TextView
+        android:layout_below="@id/heading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="@color/accent_color"
+        android:layout_marginTop="15sp"
+        android:textSize="24sp"
+        android:text="1. Use your name, country and email to login  to the app. \n 2. View the experiences uploaded by others in the first page. \n 3. On the top right corner, there is an icon. \n 4. Select the 'Write' option to enter your own experience. \n 5. You may sign out from the app using the 'Sign Out' button. \n 6. Find the website version on the following link: \n https://ayush786113.github.io/ikwnd/"/>
+
+</RelativeLayout>

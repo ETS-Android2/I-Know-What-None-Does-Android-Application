@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/secondary_color">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/self"
+        android:layout_marginTop="5sp"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/self_intro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/avatar"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/accent_color"
+        android:text="Hello World! I am Ayush Ghosal. I am a college student in Kolkata currently pursuing B.Tech CSE from Techno Main Salt Lake. I love to play flute and also play octapad in our band. I aspire to be an android developer at Google and a freelance white hat hacker, better called a Penetration Tester or Security Analyst." />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/self_intro"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/accent_color"
+        android:text="I created I Know What None Does as my personal project and to provide a platform to the World for sharing their unexplainable experiences. I believe that supernaturalism do exist in the World and it has an undeniable impact on our existence and evolution." />
+
+</RelativeLayout>

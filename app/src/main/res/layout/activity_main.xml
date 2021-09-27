@@ -8,13 +8,14 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:background="@color/pink"
+        app:subtitleTextColor="@color/accent_color"
+        android:background="@color/secondary_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:title="@string/app_name"
         app:menu="@menu/options"
-        app:subtitleTextColor="@color/white"
-        app:titleTextColor="@color/white"/>
+        android:foregroundTint="@color/accent_color"
+        app:titleTextColor="@color/accent_color"/>
     <ListView
         android:id="@+id/list"
         android:layout_below="@+id/toolbar"
@@ -22,5 +23,5 @@
         android:layout_height="match_parent"
         android:padding="10dp"
         android:paddingVertical="10dp"
-        android:background="@color/white"/>
+        android:background="@color/secondary_color"/>
 </RelativeLayout>
